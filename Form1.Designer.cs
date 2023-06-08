@@ -35,6 +35,7 @@
             numericGridSize = new NumericUpDown();
             btnRun = new Button();
             panelGrid = new Panel();
+            solveButton = new Button();
             panelControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNbAgents).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericGridSize).BeginInit();
@@ -42,6 +43,7 @@
             // 
             // panelControls
             // 
+            panelControls.Controls.Add(solveButton);
             panelControls.Controls.Add(label2);
             panelControls.Controls.Add(label1);
             panelControls.Controls.Add(numericNbAgents);
@@ -103,6 +105,16 @@
             panelGrid.Size = new Size(565, 518);
             panelGrid.TabIndex = 1;
             // 
+            // button1
+            // 
+            solveButton.Location = new Point(45, 254);
+            solveButton.Name = "solveButton";
+            solveButton.Size = new Size(94, 29);
+            solveButton.TabIndex = 5;
+            solveButton.Text = "Résoudre";
+            solveButton.UseVisualStyleBackColor = true;
+            solveButton.Click += solveButton_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -128,5 +140,6 @@
         private Panel panelGrid;
         private Label label1;
         private Label label2;
+        private Button solveButton;
     }
 }

@@ -17,20 +17,25 @@ public partial class Form1 : Form
 
     private void numericGridSize_ValueChanged(object sender, EventArgs e)
     {
-        numericNbAgents.Maximum = numericGridSize.Value * numericGridSize.Value - 1 ;
+        numericNbAgents.Maximum = numericGridSize.Value * numericGridSize.Value - 1;
     }
 
     private void btnRun_Click(object sender, EventArgs e)
     {
-        _grid = new Grid((int)numericGridSize.Value, (int)numericNbAgents.Value);
-        drawGrid();
+        _grid = new Grid((int)numericGridSize.Value, (int)numericNbAgents.Value, this);
+        DrawGrid();
+    }
+
+    private void solveButton_Click(object sender, EventArgs e)
+    {
+        _grid.Solve(500);
     }
 
     #endregion
 
     #region Drawing grid
 
-    private void drawGrid()
+    public void DrawGrid()
     {
         panelGrid.Refresh();
 
