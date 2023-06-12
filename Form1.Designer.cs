@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             panelControls = new Panel();
+            solveButton = new Button();
             label2 = new Label();
             label1 = new Label();
             numericNbAgents = new NumericUpDown();
             numericGridSize = new NumericUpDown();
             btnRun = new Button();
             panelGrid = new Panel();
-            solveButton = new Button();
             panelControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericNbAgents).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericGridSize).BeginInit();
@@ -53,6 +53,16 @@
             panelControls.Name = "panelControls";
             panelControls.Size = new Size(192, 527);
             panelControls.TabIndex = 0;
+            // 
+            // solveButton
+            // 
+            solveButton.Location = new Point(45, 254);
+            solveButton.Name = "solveButton";
+            solveButton.Size = new Size(94, 29);
+            solveButton.TabIndex = 5;
+            solveButton.Text = "Résoudre";
+            solveButton.UseVisualStyleBackColor = true;
+            solveButton.Click += solveButton_Click;
             // 
             // label2
             // 
@@ -102,18 +112,8 @@
             // 
             panelGrid.Location = new Point(259, 31);
             panelGrid.Name = "panelGrid";
-            panelGrid.Size = new Size(565, 518);
+            panelGrid.Size = new Size(520, 520);
             panelGrid.TabIndex = 1;
-            // 
-            // button1
-            // 
-            solveButton.Location = new Point(45, 254);
-            solveButton.Name = "solveButton";
-            solveButton.Size = new Size(94, 29);
-            solveButton.TabIndex = 5;
-            solveButton.Text = "Résoudre";
-            solveButton.UseVisualStyleBackColor = true;
-            solveButton.Click += solveButton_Click;
             // 
             // Form1
             // 

@@ -33,7 +33,7 @@ public class Grid
     /// <param name="stepTime">time of a step (ms)</param>
     public void Solve(int stepTime)
     {
-        while (!Agents.All(a => a.Position == a.Target))
+        while (!Agents.All(a => a.Position.Equals(a.Target)))
         {
             foreach (var agent in Agents)
             {

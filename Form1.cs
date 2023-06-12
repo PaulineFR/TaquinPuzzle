@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Xml;
 using TaquinPuzzle.Model;
 
 namespace TaquinPuzzle;
@@ -23,6 +24,11 @@ public partial class Form1 : Form
     private void btnRun_Click(object sender, EventArgs e)
     {
         _grid = new Grid((int)numericGridSize.Value, (int)numericNbAgents.Value, this);
+
+        _grid.Agents.ForEach(agent =>
+        {
+            agent.Color = getNewRandomColor();
+        });
         DrawGrid();
     }
 
@@ -51,7 +57,6 @@ public partial class Form1 : Form
         // draw targets
         _grid.Agents.ForEach(agent =>
         {
-            agent.Color = getNewRandomColor();
             graph.FillRectangle(new SolidBrush(agent.Color), agent.Target.X * xSpace, agent.Target.Y * ySpace, (int)xSpace, (int)ySpace);
 
         });
@@ -59,8 +64,8 @@ public partial class Form1 : Form
         // draw agents
         _grid.Agents.ForEach(agent =>
         {
-            graph.FillEllipse(new SolidBrush(agent.Color), new Rectangle(agent.Position.X * (int)xSpace, agent.Position.Y * (int)ySpace, (int)xSpace, (int)ySpace));
-            graph.DrawEllipse(penIs, new Rectangle(agent.Position.X * (int)xSpace, agent.Position.Y * (int)ySpace, (int)xSpace, (int)ySpace));
+            graph.FillEllipse(new SolidBrush(agent.Color), new Rectangle(agent.Position.X * (int)xSpace + agent.Position.X/2, agent.Position.Y * (int)ySpace + agent.Position.Y/2, (int)xSpace, (int)ySpace));
+            graph.DrawEllipse(penIs, new Rectangle(agent.Position.X * (int)xSpace + agent.Position.X/2, agent.Position.Y * (int)ySpace + agent.Position.Y/2, (int)xSpace, (int)ySpace));
         });
 
 
