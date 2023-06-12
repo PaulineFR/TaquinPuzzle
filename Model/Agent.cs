@@ -32,14 +32,17 @@ public class Agent
 
     public async Task<bool> MoveAsync()
     {
+        Random rnd = new();
+
         var availablePositions = Grid.GetAvailablePositionsAround(Position);
 
         Message? message = null;
         if (MailBox.Reader.Count > 0)
             message = await MailBox.Reader.ReadAsync();
 
-        foreach (var nextPosition in availablePositions)
+        while (availablePositions.Any())
         {
+            var nextPosition = availablePositions.ElementAt(rnd.Next(availablePositions.Count));
             if (message != null || GetDistanceBetween(nextPosition.Item1, Target) < GetDistanceToTarget())
             {
                 if (nextPosition.Item2)
@@ -53,11 +56,14 @@ public class Agent
                     //agent = Grid.Agents[1];
                     if(agent != null)
                         agent.MailBox.Writer.TryWrite(new Message() { Sender = this, Receiver = agent, Action = Action.North });
+                    return false;
                 }
             }
-        }
+            availablePositions.Remove(nextPosition);
 
+        }
         return false;
+
     }
 
     #endregion
