@@ -1,4 +1,6 @@
-﻿namespace TaquinPuzzle.Model;
+﻿using System.Threading.Channels;
+
+namespace TaquinPuzzle.Model;
 
 public class Agent
 {
@@ -8,35 +10,53 @@ public class Agent
     public Grid Grid { get; set; }
     public Color Color { get; set; }
     public List<Agent> Others { get { return Grid.Agents.Where(a => a.Id != this.Id).ToList(); } }
+    public Channel<Message> MailBox { get; } = Channel.CreateUnbounded<Message>();
 
 
     #region public methods
 
-    public void Run(int stepTime)
+    public async Task RunAsync(int stepTime)
     {
-        while (Position.Equals(Target))
+        //while (!Position.Equals(Target))
+        while (!Grid.Solved)
         {
             Grid.Mutex.WaitOne();
-            bool hasMoved = Move();
-            if (hasMoved)
+            if(!Position.Equals(Target) || MailBox.Reader.Count > 0)
             {
-                Thread.Sleep(stepTime);
+                await MoveAsync();
             }
+            Thread.Sleep(stepTime);
             Grid.Mutex.ReleaseMutex();
         }
     }
 
-    public bool Move()
+    public async Task<bool> MoveAsync()
     {
         var availablePositions = Grid.GetAvailablePositionsAround(Position);
+
+        Message? message = null;
+        if (MailBox.Reader.Count > 0)
+            message = await MailBox.Reader.ReadAsync();
+
         foreach (var nextPosition in availablePositions)
         {
-            if (GetDistanceBetween(nextPosition, Target) < GetDistanceToTarget())
+            if (message != null || GetDistanceBetween(nextPosition.Item1, Target) < GetDistanceToTarget())
             {
-                Position = nextPosition;
-                return true;
+                if (nextPosition.Item2)
+                {
+                    Position = nextPosition.Item1;
+                    return true;
+                }
+                else
+                {
+                    var agent = Grid.Agents.FirstOrDefault(a => a.Position.Equals(nextPosition.Item1));
+                    //agent = Grid.Agents[1];
+                    if(agent != null)
+                        agent.MailBox.Writer.TryWrite(new Message() { Sender = this, Receiver = agent, Action = Action.North });
+                }
             }
         }
+
         return false;
     }
 

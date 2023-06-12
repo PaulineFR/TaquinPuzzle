@@ -6,7 +6,6 @@ public class Grid
     public int Size { get; set; }
     public bool Solved { get; private set; } = false;
     public List<Agent> Agents { get; set; } = new();
-    public MailBox MailBox { get; set; }
     public Mutex Mutex { get; } = new();
 
     public Grid(int size, int nbAgents, Form1 form)
@@ -38,26 +37,34 @@ public class Grid
     {
         foreach (var agent in Agents)
         {
-            new Thread(() => agent.Run(stepTime)).Start();
+            new Thread(() => agent.RunAsync(stepTime)).Start();
         }
     }
 
-    public List<Coordinates> GetAvailablePositionsAround(Coordinates pos)
+    public List<Tuple<Coordinates, bool>> GetAvailablePositionsAround(Coordinates pos)
     {
-        var nearbyPositions = new List<Coordinates>();
+        var nearbyPositions = new List<Tuple<Coordinates, bool>>();
         if (pos.X > 0)
-            nearbyPositions.Add(new() { X = pos.X - 1, Y = pos.Y });
-        if (pos.X < Size - 1)
-            nearbyPositions.Add(new() { X = pos.X + 1, Y = pos.Y });
-        if (pos.Y > 0)
-            nearbyPositions.Add(new() { X = pos.X, Y = pos.Y - 1 });
-        if (pos.Y < Size - 1)
-            nearbyPositions.Add(new() { X = pos.X, Y = pos.Y + 1 });
-
-        foreach (var agent in Agents)
         {
-            nearbyPositions.RemoveAll(p => p.Equals(agent.Position));
+            Coordinates newPos = new() { X = pos.X - 1, Y = pos.Y };
+            nearbyPositions.Add(new(newPos, !Agents.Any(a => a.Position.Equals(newPos))));
         }
+        if (pos.X < Size - 1)
+        {
+            Coordinates newPos = new() { X = pos.X + 1, Y = pos.Y };
+            nearbyPositions.Add(new(newPos, !Agents.Any(a => a.Position.Equals(newPos))));
+        }
+        if (pos.Y > 0)
+        {
+            Coordinates newPos = new() { X = pos.X, Y = pos.Y - 1 };
+            nearbyPositions.Add(new(newPos, !Agents.Any(a => a.Position.Equals(newPos))));
+        }
+        if (pos.Y < Size - 1)
+        {
+            Coordinates newPos = new() { X = pos.X, Y = pos.Y + 1 };
+            nearbyPositions.Add(new(newPos, !Agents.Any(a => a.Position.Equals(newPos))));
+        }
+
         return nearbyPositions;
     }
 
