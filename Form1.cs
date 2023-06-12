@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.Windows.Forms.Design;
 using System.Xml;
 using TaquinPuzzle.Model;
 
@@ -35,6 +36,11 @@ public partial class Form1 : Form
     private void solveButton_Click(object sender, EventArgs e)
     {
         _grid.Solve(500);
+        while (!_grid.Solved)
+        {
+            DrawGrid();
+            Thread.Sleep(250);
+        }
     }
 
     #endregion

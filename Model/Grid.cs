@@ -4,7 +4,10 @@ public class Grid
 {
     public Form1 Display { get; set; }
     public int Size { get; set; }
+    public bool Solved { get; private set; } = false;
     public List<Agent> Agents { get; set; } = new();
+    public MailBox MailBox { get; set; }
+    public Mutex Mutex { get; } = new();
 
     public Grid(int size, int nbAgents, Form1 form)
     {
@@ -33,16 +36,9 @@ public class Grid
     /// <param name="stepTime">time of a step (ms)</param>
     public void Solve(int stepTime)
     {
-        while (!Agents.All(a => a.Position.Equals(a.Target)))
+        foreach (var agent in Agents)
         {
-            foreach (var agent in Agents)
-            {
-                if (agent.Move())
-                {
-                    Thread.Sleep(stepTime);
-                    Display.DrawGrid();
-                }
-            }
+            new Thread(() => agent.Run(stepTime)).Start();
         }
     }
 

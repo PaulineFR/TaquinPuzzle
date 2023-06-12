@@ -12,6 +12,20 @@ public class Agent
 
     #region public methods
 
+    public void Run(int stepTime)
+    {
+        while (Position.Equals(Target))
+        {
+            Grid.Mutex.WaitOne();
+            bool hasMoved = Move();
+            if (hasMoved)
+            {
+                Thread.Sleep(stepTime);
+            }
+            Grid.Mutex.ReleaseMutex();
+        }
+    }
+
     public bool Move()
     {
         var availablePositions = Grid.GetAvailablePositionsAround(Position);
