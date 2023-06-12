@@ -41,6 +41,14 @@ public class Grid
         }
     }
 
+    public void Repaint()
+    {
+        Display.Invoke(new MethodInvoker(delegate
+        {
+            Display.DrawGrid();
+        }));
+    }
+
     public List<Tuple<Coordinates, bool>> GetAvailablePositionsAround(Coordinates pos)
     {
         var nearbyPositions = new List<Tuple<Coordinates, bool>>();

@@ -21,16 +21,15 @@ public class Agent
         while (!Grid.Solved)
         {
             Grid.Mutex.WaitOne();
-            if(!Position.Equals(Target) || MailBox.Reader.Count > 0)
+            if (!Position.Equals(Target) || MailBox.Reader.Count > 0)
             {
-                await MoveAsync();
+                await MoveAsync(stepTime);
             }
-            Thread.Sleep(stepTime);
             Grid.Mutex.ReleaseMutex();
         }
     }
 
-    public async Task<bool> MoveAsync()
+    public async Task<bool> MoveAsync(int stepTime)
     {
         Random rnd = new();
 
@@ -47,14 +46,16 @@ public class Agent
             {
                 if (nextPosition.Item2)
                 {
+                    Thread.Sleep(stepTime);
                     Position = nextPosition.Item1;
+                    Grid.Repaint();
                     return true;
                 }
                 else
                 {
                     var agent = Grid.Agents.FirstOrDefault(a => a.Position.Equals(nextPosition.Item1));
                     //agent = Grid.Agents[1];
-                    if(agent != null)
+                    if (agent != null)
                         agent.MailBox.Writer.TryWrite(new Message() { Sender = this, Receiver = agent, Action = Action.North });
                     return false;
                 }

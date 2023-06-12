@@ -36,11 +36,6 @@ public partial class Form1 : Form
     private void solveButton_Click(object sender, EventArgs e)
     {
         _grid.Solve(300);
-        while (!_grid.Solved)
-        {
-            Thread.Sleep(250);
-            DrawGrid();
-        }
     }
 
     #endregion
@@ -70,8 +65,8 @@ public partial class Form1 : Form
         // draw agents
         _grid.Agents.ForEach(agent =>
         {
-            graph.FillEllipse(new SolidBrush(agent.Color), new Rectangle(agent.Position.X * (int)xSpace + agent.Position.X/2, agent.Position.Y * (int)ySpace + agent.Position.Y/2, (int)xSpace, (int)ySpace));
-            graph.DrawEllipse(penIs, new Rectangle(agent.Position.X * (int)xSpace + agent.Position.X/2, agent.Position.Y * (int)ySpace + agent.Position.Y/2, (int)xSpace, (int)ySpace));
+            graph.FillEllipse(new SolidBrush(agent.Color), new Rectangle(agent.Position.X * (int)xSpace + agent.Position.X / 2, agent.Position.Y * (int)ySpace + agent.Position.Y / 2, (int)xSpace, (int)ySpace));
+            graph.DrawEllipse(penIs, new Rectangle(agent.Position.X * (int)xSpace + agent.Position.X / 2, agent.Position.Y * (int)ySpace + agent.Position.Y / 2, (int)xSpace, (int)ySpace));
         });
 
 
