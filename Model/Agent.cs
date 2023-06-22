@@ -73,31 +73,36 @@ public class Agent
 
 
     #region private methods
+    //private int GetDistanceBetween(Coordinates a, Coordinates b)
+    //{
+    //    var pathFinderOptions = new PathFinderOptions
+    //    {
+    //        PunishChangeDirection = true,
+    //        UseDiagonals = false
+    //    };
+
+    //    short[,] tiles = new short[Grid.Size, Grid.Size];
+    //    for (int i = 0; i < Grid.Size; i++)
+    //    {
+    //        for (int j = 0; j < Grid.Size; j++)
+    //        {
+    //            tiles[i, j] = (short)(Grid.Agents.Any(a => a.Position.Equals(new Coordinates { X = i, Y = j })) ? 0 : 1);
+    //        }
+    //    }
+    //    tiles[a.X, a.Y] = 1;
+    //    tiles[b.X, b.Y] = 1;
+
+    //    var worldGrid = new WorldGrid(tiles);
+    //    var pathFinder = new PathFinder(worldGrid, pathFinderOptions);
+
+    //    Point[] path = pathFinder.FindPath(new Point(a.X, a.Y), new Point(b.X, b.Y));
+    //    var ret = path.Length;
+    //    return ret;
+    //}
+
     private int GetDistanceBetween(Coordinates a, Coordinates b)
     {
-        var pathFinderOptions = new PathFinderOptions
-        {
-            PunishChangeDirection = true,
-            UseDiagonals = false
-        };
-
-        short[,] tiles = new short[Grid.Size, Grid.Size];
-        for (int i = 0; i < Grid.Size; i++)
-        {
-            for (int j = 0; j < Grid.Size; j++)
-            {
-                tiles[i, j] = (short)(Grid.Agents.Any(a => a.Position.Equals(new Coordinates { X = i, Y = j })) ? 0 : 1);
-            }
-        }
-        tiles[a.X, a.Y] = 1;
-        tiles[b.X, b.Y] = 1;
-
-        var worldGrid = new WorldGrid(tiles);
-        var pathFinder = new PathFinder(worldGrid, pathFinderOptions);
-
-        Point[] path = pathFinder.FindPath(new Point(a.X, a.Y), new Point(b.X, b.Y));
-        var ret = path.Length;
-        return ret;
+        return Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
     }
 
     private int GetDistanceToTarget()
